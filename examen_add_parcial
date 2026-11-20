@@ -1,0 +1,69 @@
+<?php
+$pot = $_POST['pot'] ?? '';
+$dinero = $_POST['dinero'] ?? '';
+$postura = $_POST['postura'] ?? '';
+$moneda = '';
+$mensaje = '';
+
+if(isset($_POST['reiniciar'])){
+    $pot= 100;
+    $dinero= '';
+    $postura= '';
+}
+if (isset($_POST['apostar'])){
+    $pot= (int)$pot;      
+    $dinero= (int)$dinero;
+
+    if ($pot<= 0){
+        $mensaje= 'No queda bote. Pulsa Reiniciar.';
+    } elseif ($dinero <= 0 || $dinero >= $pot) {
+        $mensaje='La apuesta debe ser mayor que 0 y menor que el bote .';
+    } elseif ($postura ==='') {
+        $mensaje = 'Elige Cara o Cruz.';
+    } else{
+        $moneda= (rand(0,1) === 0) ?'CARA':'CRUZ';
+        if($moneda === $postura){
+            $pot += $dinero;              
+            $mensaje = '¡Has acertado!';
+        }else{
+            $pot -= $dinero;              
+            $mensaje = 'Has fallado.';
+        }
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang= "es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cara o Cruz 2.0</title>
+</head>
+<body>
+
+<form method="post">
+    <fieldset>
+        <title>Cara o Cruz 2.0</title>
+
+        POT: <input type="text" value="<?= $pot ?>" readonly>
+        <input type="hidden" name="pot" value="<?= $pot ?>"><br>
+
+        Dinero: <input type="number" name="dinero" value="<?= $dinero ?>">
+        <input type="radio" name="postura" value="CARA" <?= $postura === 'CARA' ? 'checked' : '' ?>> Cara
+        <input type="radio" name="postura" value="CRUZ" <?= $postura === 'CRUZ' ? 'checked' : '' ?>> Cruz
+ 
+        MONEDA: <input type="text" value="<?= $moneda ?>" readonly>
+        <input type="submit" name="apostar" value="Apostar">
+        <input type="submit" name="reiniciar" value="Reiniciar">
+        <p><?= $mensaje ?></p>
+    </fieldset>
+</form>
+</body>
+</html>
+
+
+
+
+
+
+
+ 
